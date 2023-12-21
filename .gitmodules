@@ -1,0 +1,6 @@
+[submodule "lib/fleet-protocol"]
+	path = lib/fleet-protocol
+	url = git@github.com:bringauto/fleet-protocol.git
+[submodule "python_client/lib/internal_client"]
+	path = python_client/lib/internal_client
+	url = ssh://git@gitlab.bringauto.com:1999/bring-auto/fleet-protocol-v2/internal-client-python.git
