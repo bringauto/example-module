@@ -20,7 +20,9 @@ IF (NOT BRINGAUTO_SYSTEM_DEP)
     INCLUDE(cmake/Dependencies.cmake)
 ENDIF ()
 
-ADD_SUBDIRECTORY("lib/fleet-protocol")
+IF (NOT TARGET common_headers)
+    ADD_SUBDIRECTORY("lib/fleet-protocol")
+ENDIF ()
 
 FILE(GLOB_RECURSE MODULE_GATEWAY_SOURCES "source/module_gateway/*")
 FILE(GLOB_RECURSE EXTERNAL_SERVER_SOURCES "source/external_server/*")
@@ -28,14 +30,14 @@ FILE(GLOB_RECURSE COMMON_SOURCES "source/common/*")
 
 ADD_LIBRARY(example_module_gateway SHARED ${MODULE_GATEWAY_SOURCES} ${COMMON_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(example_module_gateway PRIVATE "include/common/")
-TARGET_LINK_LIBRARIES(example_module_gateway PUBLIC
+TARGET_LINK_LIBRARIES(example_module_gateway PRIVATE
         common_headers
         module_gateway_maintainer
 )
 
 ADD_LIBRARY(example_external_server SHARED ${EXTERNAL_SERVER_SOURCES} ${COMMON_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(example_external_server PRIVATE "include/common/")
-TARGET_LINK_LIBRARIES(example_external_server PUBLIC
+TARGET_LINK_LIBRARIES(example_external_server PRIVATE
         common_headers
         external_server
 )
