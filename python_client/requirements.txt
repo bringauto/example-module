@@ -5,3 +5,6 @@ protobuf
 pydantic~=1.10.4
 
 inputimeout~=1.0.4
+
+# internal client
+git+https://github.com/bringauto/internal-client-python.git@BAF-705/internal-client-as-package

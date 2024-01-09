@@ -1,13 +1,13 @@
 # Internal client examples
 
-This repo contains implementation of example module device using internal client for fleet protocol v2. 
+This repo contains implementation of example module device using internal client for fleet protocol v2.
 These devices is a virtual button which sends it's current state and expects state of it's LED as response.
 
 #### Preparing environment
 Before running example devices, it is good practice to create a virtual environment:
 ```
-python -m venv example_devices
-source ./example_devices/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 ```
 Install dependencies:
 ```
@@ -15,7 +15,7 @@ pip install -r requirements.txt
 ```
 
 ## Button
-Button is a simple button device which has one LED attached to it. As status, it sends json with key `"pressed"` indicationg wheter button is pressed. As command, it expects json with key `"lit_up"` indicating the desired state of internal LED. 
+Button is a simple button device which has one LED attached to it. As status, it sends json with key `"pressed"` indicationg wheter button is pressed. As command, it expects json with key `"lit_up"` indicating the desired state of internal LED.
 ### Usage
 Fake buttons can be run with `run_buttons.py` script. It expects config in `yaml` format which specifies attributes for button or multiple buttons (see `buttons.yaml`):
 ```yaml

@@ -1,19 +1,18 @@
 import json
 import logging
-import random
 from dataclasses import dataclass
 import asyncio
 import os
-import yaml
 import argparse
 
+import yaml
 from rich.logging import RichHandler
 
-from lib.internal_client.internal_client import InternalClient, exceptions
+from internal_client import InternalClient, exceptions
 from button_logic import ButtonLogic, ButtonState, ButtonLedState
 
-class CarAccessoryInternalClient(InternalClient):
-    MODULE_ID = 1000
+MODULE_ID = 1000
+
 
 @dataclass
 class ButtonClientConfig:
@@ -21,6 +20,9 @@ class ButtonClientConfig:
     device_type: int
     device_role: str
     device_priority: int = 0
+
+    def __repr__(self) -> str:
+        return f"(name={self.device_name}, type={self.device_type}, role={self.device_role}, priority={self.device_priority})"
 
     @staticmethod
     def load_config(file_name: str) -> list["ButtonClientConfig"]:
@@ -50,13 +52,10 @@ class ButtonClientConfig:
 
         return button_configs
 
-    def __repr__(self):
-        return f"(name={self.device_name}, type={self.device_type}, role={self.device_role}, priority={self.device_priority})"
-
 
 class ButtonClient:
 
-    def __init__(self, server_ip: str, server_port: int, button_config: ButtonClientConfig, manual_mode: bool):
+    def __init__(self, server_ip: str, server_port: int, button_config: ButtonClientConfig, manual_mode: bool) -> None:
         self.server_connection = (server_ip, server_port)
         self.device_name = button_config.device_name
         self.device_type = button_config.device_type
@@ -68,9 +67,33 @@ class ButtonClient:
         self.logger = logging.getLogger(f"{self.device_name}")
         self.button = ButtonLogic(logger=self.logger, manual_mode=manual_mode)
 
+    async def start(self) -> None:
+        if not self._connect():
+            return
+
+        while True:
+            state_data = self._get_state_data()
+            try:
+                self.client.send_status(state_data, timeout=5)
+            except (exceptions.CommunicationExceptions, exceptions.ConnectExceptions) as e:
+                self.logger.error(f"Send status unsuccessful: {e}")
+                break
+
+            command_data = self.client.get_command()
+            try:
+                self._handle_command_data(command_data)
+            except ValueError as e:
+                self.logger.error(f"Invalid Command: {e}")
+                break
+            if not self.manual_mode:
+                await asyncio.sleep(5)
+
+        self.client.destroy()
+
     def _connect(self) -> bool:
         try:
-            self.client = CarAccessoryInternalClient(
+            self.client = InternalClient(
+                MODULE_ID,
                 self.server_connection[0],
                 self.server_connection[1],
                 self.device_name,
@@ -108,35 +131,11 @@ class ButtonClient:
 
         self.button.set_led_state(ButtonLedState(led_command))
 
-    async def start(self) -> None:
-        if not self._connect():
-            return
-
-        while True:
-            state_data = self._get_state_data()
-            try:
-                self.client.send_status(state_data, timeout=5)
-            except (exceptions.CommunicationExceptions, exceptions.ConnectExceptions) as e:
-                self.logger.error(f"Send status unsuccessful: {e}")
-                break
-
-            command_data = self.client.get_command()
-            try:
-                self._handle_command_data(command_data)
-            except ValueError as e:
-                self.logger.error(f"Invalid Command: {e}")
-                break
-            if not self.manual_mode:
-                await asyncio.sleep(5)
-
-        self.client.destroy()
-
 
 async def run_buttons(
     server_ip: str, server_port: int, button_configs: list[ButtonClientConfig], manual_mode: bool
 ) -> None:
     logger = logging.getLogger("TaskRunner")
-
     buttons = [ButtonClient(server_ip, server_port, cfg, manual_mode) for cfg in button_configs]
     tasks = []
     for button, button_cfg in zip(buttons, button_configs):

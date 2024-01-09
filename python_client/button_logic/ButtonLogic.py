@@ -1,5 +1,7 @@
 from enum import Enum
 import random
+from typing import Literal
+from logging import Logger
 
 from inputimeout import inputimeout, TimeoutOccurred
 
@@ -18,13 +20,13 @@ class ButtonLogic:
     NOT_PRESSED_CHANGE_PROB = 0.4
     PRESSED_CHANGE_PROB = 0.6
 
-    def __init__(self, logger, manual_mode):
+    def __init__(self, logger: Logger, manual_mode: bool) -> None:
         self.button_state = ButtonState.NOT_PRESSED
         self.led_state = ButtonLedState.OFF
         self.logger = logger
         self.manual_mode = manual_mode
 
-    def get_button_state(self):
+    def get_button_state(self) -> Literal[ButtonState.NOT_PRESSED, ButtonState.PRESSED]:
         if self.manual_mode:
             try:
                 c = inputimeout(prompt='', timeout=1)
@@ -52,7 +54,7 @@ class ButtonLogic:
         self.logger.info(f"Button state {state_str}", extra={"markup": True})
         return self.button_state
 
-    def set_led_state(self, state):
+    def set_led_state(self, state) -> None:
         self.led_state = state
         state_str = (
             "[bold]OFF[/]"
