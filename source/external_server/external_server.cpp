@@ -4,7 +4,8 @@
 #include <string>
 #include <sstream>
 
-#include <external_server_interface.h>
+#include <fleet_protocol/module_maintainer/external_server/external_server_interface.h>
+#include <fleet_protocol/common_headers/device_management.h>
 #include <cstring>
 
 

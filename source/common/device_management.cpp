@@ -1,5 +1,5 @@
-#include <device_management.h>
-#include <general_error_codes.h>
+#include <fleet_protocol/common_headers/device_management.h>
+#include <fleet_protocol/common_headers/general_error_codes.h>
 
 #include <example_module.hpp>
 
