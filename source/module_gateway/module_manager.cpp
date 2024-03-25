@@ -1,12 +1,11 @@
-#include <string>
-#include <cstring>
-
-#include <device_management.h>
-#include <module_manager.h>
-#include <memory_management.h>
 #include <example_module.hpp>
 
+#include <fleet_protocol/common_headers/device_management.h>
+#include <fleet_protocol/module_maintainer/module_gateway/module_manager.h>
+#include <fleet_protocol/common_headers/memory_management.h>
 
+#include <string>
+#include <cstring>
 
 
 void pressed_true(struct buffer *buffer) {
