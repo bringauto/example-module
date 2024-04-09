@@ -1,7 +1,7 @@
 This is the implementation of Example module. Repo contains example_module libraries and a python client.
 
 This module serves as an example for module maintainers to implement their own modules outside reserved range of modules. It is not intended to be used in production.
-Module number of this module is 999.
+Module number of this module is 1000.
 
 # Requirements
 
