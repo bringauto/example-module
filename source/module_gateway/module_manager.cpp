@@ -73,7 +73,8 @@ int status_data_valid(const struct buffer status, unsigned int device_type) {
 	}
 	switch(device_type) {
 		case BUTTON_DEVICE_TYPE:
-			if(strncmp(data, "{\"pressed\": false}", status.size_in_bytes) == 0 || strncmp(data, "{\"pressed\": true}", status.size_in_bytes) == 0) {
+			if(strncmp("{\"pressed\": false}", data, std::max(status.size_in_bytes, std::size_t(19))) == 0 ||
+			   strncmp("{\"pressed\": true}", data, std::max(status.size_in_bytes, std::size_t(18))) == 0) {
 				return OK;
 			}
 			break;
@@ -91,7 +92,8 @@ int command_data_valid(const struct buffer command, unsigned int device_type) {
 	}
 	switch(device_type) {
 		case BUTTON_DEVICE_TYPE:
-			if(strncmp(data, "{\"lit_up\": false}", command.size_in_bytes) == 0 || strncmp(data, "{\"lit_up\": true}", command.size_in_bytes) == 0) {
+			if(strncmp("{\"lit_up\": false}", data, std::max(command.size_in_bytes, std::size_t(18))) == 0 ||
+			   strncmp("{\"lit_up\": true}", data, std::max(command.size_in_bytes, std::size_t(17))) == 0) {
 				return OK;
 			}
 			break;
