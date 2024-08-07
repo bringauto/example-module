@@ -74,13 +74,13 @@ int status_data_valid(const struct buffer status, unsigned int device_type) {
 	if(data == nullptr) {
 		return NOT_OK;
 	}
-	std::string pressed_false = "{\"pressed\": false}";
-	std::string pressed_true = "{\"pressed\": true}";
+	const std::string pressed_false = "{\"pressed\": false}";
+	const std::string pressed_true = "{\"pressed\": true}";
 
 	switch(device_type) {
 		case BUTTON_DEVICE_TYPE:
-			if(strncmp(pressed_false.c_str(), data, std::max(status.size_in_bytes, pressed_false.size())) == 0 ||
-			   strncmp(pressed_true.c_str(), data, std::max(status.size_in_bytes, pressed_true.size())) == 0) {
+			if ((status.size_in_bytes == pressed_false.size() && strncmp(pressed_false.c_str(), data, status.size_in_bytes) == 0) ||
+				(status.size_in_bytes == pressed_true.size() && strncmp(pressed_true.c_str(), data, status.size_in_bytes) == 0)) {
 				return OK;
 			}
 			break;
@@ -96,13 +96,13 @@ int command_data_valid(const struct buffer command, unsigned int device_type) {
 	if(data == nullptr) {
 		return NOT_OK;
 	}
-	std::string lit_up_false = "{\"lit_up\": false}";
-	std::string lit_up_true = "{\"lit_up\": true}";
+	const std::string lit_up_false = "{\"lit_up\": false}";
+	const std::string lit_up_true = "{\"lit_up\": true}";
 
 	switch(device_type) {
 		case BUTTON_DEVICE_TYPE:
-			if(strncmp(lit_up_false.c_str(), data, std::max(command.size_in_bytes, lit_up_false.size())) == 0 ||
-			   strncmp(lit_up_true.c_str(), data, std::max(command.size_in_bytes, lit_up_true.size())) == 0) {
+			if ((command.size_in_bytes == lit_up_false.size() && strncmp(lit_up_false.c_str(), data, command.size_in_bytes) == 0) ||
+				(command.size_in_bytes == lit_up_true.size() && strncmp(lit_up_true.c_str(), data, command.size_in_bytes) == 0)) {
 				return OK;
 			}
 			break;
