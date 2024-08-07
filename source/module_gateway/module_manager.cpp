@@ -54,6 +54,9 @@ int aggregate_status(struct buffer *aggregated_status, const struct buffer curre
 
 int aggregate_error(struct buffer *error_message, const struct buffer current_error_message, const struct buffer status,
 					unsigned int device_type) {
+	allocate(error_message, current_error_message.size_in_bytes);
+	std::memcpy(error_message->data, current_error_message.data,
+				current_error_message.size_in_bytes );
 	return OK;
 }
 
