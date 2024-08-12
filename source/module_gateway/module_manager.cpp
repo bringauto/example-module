@@ -54,6 +54,9 @@ int aggregate_status(struct buffer *aggregated_status, const struct buffer curre
 
 int aggregate_error(struct buffer *error_message, const struct buffer current_error_message, const struct buffer status,
 					unsigned int device_type) {
+	allocate(error_message, current_error_message.size_in_bytes);
+	std::memcpy(error_message->data, current_error_message.data,
+				current_error_message.size_in_bytes );
 	return OK;
 }
 
@@ -71,9 +74,13 @@ int status_data_valid(const struct buffer status, unsigned int device_type) {
 	if(data == nullptr) {
 		return NOT_OK;
 	}
+	const std::string pressed_false = "{\"pressed\": false}";
+	const std::string pressed_true = "{\"pressed\": true}";
+
 	switch(device_type) {
 		case BUTTON_DEVICE_TYPE:
-			if(strncmp(data, "{\"pressed\": false}", status.size_in_bytes) == 0 || strncmp(data, "{\"pressed\": true}", status.size_in_bytes) == 0) {
+			if ((status.size_in_bytes == pressed_false.size() && strncmp(pressed_false.c_str(), data, status.size_in_bytes) == 0) ||
+				(status.size_in_bytes == pressed_true.size() && strncmp(pressed_true.c_str(), data, status.size_in_bytes) == 0)) {
 				return OK;
 			}
 			break;
@@ -89,9 +96,13 @@ int command_data_valid(const struct buffer command, unsigned int device_type) {
 	if(data == nullptr) {
 		return NOT_OK;
 	}
+	const std::string lit_up_false = "{\"lit_up\": false}";
+	const std::string lit_up_true = "{\"lit_up\": true}";
+
 	switch(device_type) {
 		case BUTTON_DEVICE_TYPE:
-			if(strncmp(data, "{\"lit_up\": false}", command.size_in_bytes) == 0 || strncmp(data, "{\"lit_up\": true}", command.size_in_bytes) == 0) {
+			if ((command.size_in_bytes == lit_up_false.size() && strncmp(lit_up_false.c_str(), data, command.size_in_bytes) == 0) ||
+				(command.size_in_bytes == lit_up_true.size() && strncmp(lit_up_true.c_str(), data, command.size_in_bytes) == 0)) {
 				return OK;
 			}
 			break;
