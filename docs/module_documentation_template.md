@@ -2,7 +2,7 @@
 
 <!-- Provide a single sentence or a short paragraph describing the module's purpose. When using the documentation inside repository, add link to the README and vice versa - link the README to this documentation. -->
 
-This module serves as an example for module maintainers to implement their own modules outside reserved range of modules and does not serve any role in the production environment.
+This module serves as an example for module maintainers to implement their own modules outside reserved range of modules and does not serve any role in the production environment. For usage of this module, see the [README](../README.md).
 
 # Identification and supported devices
 
