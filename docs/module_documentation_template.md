@@ -1,45 +1,54 @@
 # Introduction
 
-<!-- Provide a single sentence or a short paragraph describing the module's purpose. When using the documentation inside repository, add link to the README and vice versa - link the README to this documentation.
+<!-- Provide a single sentence or a short paragraph describing the module's purpose. When using the documentation inside repository, add link to the README and vice versa - link the README to this documentation. -->
 
-Example:
-
-The Test module is provides communication between car test devices and the testing application. For more details on the usage of the module, see the [README](<path-to-readme>).
--->
+This module serves as an example for module maintainers to implement their own modules outside reserved range of modules and does not serve any role in the production environment.
 
 # Identification and supported devices
 
-<!-- Provide a list of supported devices and their identification.
+<!-- Provide a list of supported devices and their identification. -->
 
-Example:
-
-The module number/ID: `0`
+The module number/ID: `1000`.
 
 ## Devices
 
-| **Device Name** | **Device Type** | **Device Roles** | Comment                                          |
-| --------------- | --------------- | ---------------- | ------------------------------------------------ |
-| Test Button 1   | 0               | test-button-1    | Button verifying that the commands can be sent to a device of this module |
-| Test Button 2   | 0               | test-button-2    | Button verifying that the commands can be sent to a device of this module |
-| Test Camera     | 1               | test-camera      | Camera verifying quality and rate of data transfer from car |
--->
+| **Device Name** | **Device Type** | **Device Roles** | Comment                                     |
+| --------------- | --------------- | ---------------- | ------------------------------------------- |
+| button1         | 0               | test             | Button driving a state of a dedicated LED   |
+| button1         | 10              | test             | Button driving a state of a dedicated LED   |
+| button2         | 0               | test2            | Button driving a state of a dedicated LED   |
+
 
 # Messages
 
-<!-- Describe all types of messages handled by the module (including status, status error and command). For each type, describe the message contents, structure and example of the message.
-
-Example of a status description:
+<!-- Describe all types of messages handled by the module (including status, status error and command). For each type, describe the message contents, structure and example of the message. -->
 
 ## Status
 
-The status message contains information about test components with their state (`ON` or `OFF`).
+Each device (button) expects a status message containing a single key `pressed` with a boolean value indicating whether the button is pressed.
 
 ### Example
 
 ``` json
-{"state": "ON"}
+{
+    "pressed": true
+}
 ```
--->
+## Status Error
+
+Status errors are not defined for this module.
+
+## Command
+
+Each device (button) expects a command message containing a single key `lit_up` with a boolean value indicating whether the LED should be lit up.
+
+### Example
+
+``` json
+{
+    "lit_up": true
+}
+```
 
 # Details of supported devices
 
@@ -50,3 +59,11 @@ The status message contains information about test components with their state (
 - how the state is affected by the received command.
 
 -->
+
+## Button
+
+Button is a simple button device which has one LED attached to it. As status, it sends JSON with key `"pressed"` indicating whether button is pressed. As command, it expects JSON with key `"lit_up"` indicating the desired state of internal LED.
+
+See the state transition diagram below:
+
+![Button state diagram](./uml/exported_diagrams/button_state_transition_diagram.png)
