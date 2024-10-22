@@ -1,0 +1,16 @@
+@startuml button_state_transition_diagram
+    skinparam style strictuml
+
+    !define state_color #77cdff
+
+    state Pressed state_color
+    state NotPressed state_color
+
+    hide empty description
+
+    Pressed ---> NotPressed: turn off
+    Pressed -up-> Pressed: lit up
+    NotPressed ---> Pressed: lit up
+    NotPressed -up-> NotPressed: turn off
+
+@enduml

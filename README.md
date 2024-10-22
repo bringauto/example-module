@@ -3,6 +3,8 @@ This is the implementation of Example module. Repo contains example_module libra
 This module serves as an example for module maintainers to implement their own modules outside reserved range of modules. It is not intended to be used in production.
 Module number of this module is 1000.
 
+For more details on the module, see [module documentation](./docs/module_documentation_template.md).
+
 # Requirements
 
 - fleet protocol library - [v2.0.0](https://github.com/bringauto/fleet-protocol/releases/tag/v2.0.0)
